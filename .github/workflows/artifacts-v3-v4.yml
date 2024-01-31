@@ -1,0 +1,49 @@
+on: push
+jobs:
+  upload-v3:
+    strategy:
+      matrix:
+        runs-on: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - name: Create a File
+        run: echo "hello from ${{ matrix.runs-on }}" > file-${{ matrix.runs-on }}.txt
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: my-v3-artifact # NOTE: same artifact name
+          path: file-${{ matrix.runs-on }}.txt
+  download-v3:
+    needs: upload-v3
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: my-v3-artifact
+      - run: ls -R my-v3-artifact
+
+  upload-v4:
+    strategy:
+      matrix:
+        runs-on: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - name: Create a File
+        run: echo "hello from ${{ matrix.runs-on }}" > file-${{ matrix.runs-on }}.txt
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-v4-artifact-${{ matrix.runs-on }}
+          path: file-${{ matrix.runs-on }}.txt
+  download-v4:
+    needs: upload-v4
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: my-v4-artifact
+          pattern: my-v4-artifact-*
+          merge-multiple: true
+      - run: ls -R my-v4-artifact
