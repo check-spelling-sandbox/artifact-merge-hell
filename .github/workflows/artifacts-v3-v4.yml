@@ -22,7 +22,7 @@ jobs:
         with:
           name: my-v3-artifact
           path: my-v3-artifact
-      - run: ls -R my-v3-artifact
+      - run: ls -R my-v3-artifact >> $GITHUB_STEP_SUMMARY
 
   upload-v4:
     strategy:
@@ -47,4 +47,4 @@ jobs:
           path: my-v4-artifact
           pattern: my-v4-artifact-*
           merge-multiple: true
-      - run: ls -R my-v4-artifact
+      - run: ls -R my-v4-artifact >> $GITHUB_STEP_SUMMARY
